@@ -22,3 +22,9 @@ test("blocks known instruction override text", () => {
   assert.equal(result.decision, "block_and_escalate");
   assert.ok(result.matches.length > 0);
 });
+
+test("returns sanitize_and_log for medium-severity flooding", () => {
+  const result = sanitizeInput("x".repeat(50001));
+  assert.equal(result.decision, "sanitize_and_log");
+  assert.ok(result.matches.some((entry) => entry.startsWith("context_flooding:")));
+});

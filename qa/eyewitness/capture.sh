@@ -12,8 +12,24 @@ set -euo pipefail
 TARGET_URL="${1:-}"
 OUTPUT_DIR="${2:-qa/output}"
 
+is_allowed_url() {
+  case "$1" in
+    http://localhost/*|https://localhost/*|http://127.0.0.1/*|https://127.0.0.1/*|http://[::1]/*|https://[::1]/*)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
 if [ -z "$TARGET_URL" ]; then
   echo "usage: capture.sh <target-url> [output-dir]" >&2
+  exit 1
+fi
+
+if ! is_allowed_url "$TARGET_URL"; then
+  echo "capture.sh only allows localhost targets by default." >&2
   exit 1
 fi
 
@@ -29,4 +45,4 @@ SOURCE_PATH="$SOURCE_DIR/${TIMESTAMP}-${HASH}.html"
 echo "CONDUIT capture target: $TARGET_URL"
 echo "screenshot_path: $SCREENSHOT_PATH"
 echo "source_path: $SOURCE_PATH"
-echo "status: not_implemented"
+echo "status: constrained_stub"

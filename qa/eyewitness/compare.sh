@@ -13,6 +13,21 @@ BASELINE="${1:-}"
 CANDIDATE="${2:-}"
 OUTPUT_DIR="${3:-qa/output}"
 
+json_escape() {
+  printf '%s' "$1" | sed \
+    -e 's/\\/\\\\/g' \
+    -e 's/"/\\"/g'
+}
+
+html_escape() {
+  printf '%s' "$1" | sed \
+    -e 's/&/\&amp;/g' \
+    -e 's/</\&lt;/g' \
+    -e 's/>/\&gt;/g' \
+    -e "s/'/\&#39;/g" \
+    -e 's/"/\&quot;/g'
+}
+
 if [ -z "$BASELINE" ] || [ -z "$CANDIDATE" ]; then
   echo "usage: compare.sh <baseline-image> <candidate-image> [output-dir]" >&2
   exit 1
@@ -24,15 +39,15 @@ HTML_REPORT="$OUTPUT_DIR/report.html"
 
 cat > "$JSON_REPORT" <<EOF
 {
-  "baseline": "$BASELINE",
-  "candidate": "$CANDIDATE",
+  "baseline": "$(json_escape "$BASELINE")",
+  "candidate": "$(json_escape "$CANDIDATE")",
   "status": "not_implemented",
-  "html_report": "$HTML_REPORT"
+  "html_report": "$(json_escape "$HTML_REPORT")"
 }
 EOF
 
 cat > "$HTML_REPORT" <<EOF
-<html><body><h1>CONDUIT Visual Comparison</h1><p>Status: not implemented.</p></body></html>
+<html><body><h1>CONDUIT Visual Comparison</h1><p>Status: not implemented.</p><p>Baseline: $(html_escape "$BASELINE")</p><p>Candidate: $(html_escape "$CANDIDATE")</p></body></html>
 EOF
 
 echo "$JSON_REPORT"

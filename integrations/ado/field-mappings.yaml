@@ -1,19 +1,30 @@
 # ── CONDUIT MANAGED FILE ────────────────────────────────────────────
 # file:        integrations/ado/field-mappings.yaml
-# description: Local CONDUIT-to-ADO field mappings used during orchestration sync.
+# description: Local mirror of the shared CONDUIT-to-ADO field mappings defined in conduit-core.
 # owner:       BOTH
-# update:      Manual until shared mappings move fully into conduit-core.
+# update:      Regenerate from conduit-core whenever the shared mapping contract changes.
 # schema:      none
 # last_update: 2026-04-04
 # ─────────────────────────────────────────────────────────────────────
+source_of_truth:
+  package: "@conduit/core"
+  export: "adoFieldMappings"
+  local_usage: "Temporary mirror for the orchestration repo until runtime import is wired."
 convoy:
   id: System.Id
   title: System.Title
+  work_type: System.WorkItemType
   stage: Custom.ConduitStage
   status: Custom.ConduitStatus
 workstream:
   id: Custom.ConduitWorkstreamId
   repo_slug: Custom.ConduitRepoSlug
+  agent_role: Custom.ConduitAgentRole
 checkpoint:
   id: Custom.ConduitCheckpointId
   status: Custom.ConduitCheckpointStatus
+audience:
+  customer: Custom.ConduitAudienceCustomer
+  employee: Custom.ConduitAudienceEmployee
+  field_agent: Custom.ConduitAudienceFieldAgent
+  vendor_partner: Custom.ConduitAudienceVendorPartner

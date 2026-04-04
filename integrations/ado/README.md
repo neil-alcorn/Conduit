@@ -13,4 +13,9 @@
 
 This repo carries the local orchestration layer for ADO integration.
 
-The shared long-term mapping model belongs in `conduit-core`; this scaffold keeps the local repo files required by the current structure document.
+`conduit-core` is the source of truth for shared ADO field mappings. The local [`field-mappings.yaml`](/C:/Users/nalco/.codex/Conduit/integrations/ado/field-mappings.yaml) file is a temporary mirror kept only because the current structure document requires an orchestration-local mapping artifact.
+
+Operational intent:
+- shared schema and field contracts live in `conduit-core`
+- `conduit` consumes or mirrors those contracts for local sync behavior
+- changes to field mappings should be made in `conduit-core` first, then reflected here
