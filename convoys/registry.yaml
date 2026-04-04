@@ -1,0 +1,11 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        convoys/registry.yaml
+# description: Master registry of active and archived convoys known to the local orchestration repo.
+# owner:       BOTH
+# update:      On convoy creation, archive, and status changes.
+# schema:      convoys/schema/convoy.schema.json
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+convoys:
+  active: []
+  archived: []

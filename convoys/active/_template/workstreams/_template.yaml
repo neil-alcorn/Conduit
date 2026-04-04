@@ -1,0 +1,16 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        convoys/active/{{CONVOY_ID}}/workstreams/_template.yaml
+# description: Template for a repo-specific workstream record within a convoy.
+# owner:       BOTH
+# update:      On workstream creation and stage changes.
+# schema:      convoys/schema/workstream.schema.json
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+id: "{{WORKSTREAM_ID}}"
+convoy_id: "{{CONVOY_ID}}"
+repo_slug: "{{REPO_SLUG}}"
+stage: 0
+status: pending
+depends_on: []
+branch: "{{BRANCH_NAME}}"
+checkpoints: []

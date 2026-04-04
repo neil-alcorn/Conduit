@@ -1,0 +1,29 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/roles/requirements.yaml
+# description: Role definition for the Requirements Agent.
+# owner:       HUMAN
+# update:      Manual — role definitions require approval before activation.
+# schema:      agents/roles/_template.yaml
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+role:
+  name: requirements
+  display_name: Requirements Agent
+  description: Authors and refines the BA requirements portion of the Living Spec.
+  activates_at_stages: [1]
+  work_types: [all]
+  permissions:
+    read_highway: true
+    write_highway: false
+    read_convoys: true
+    write_convoys: true
+    read_code: true
+    write_code: false
+    trigger_gate: false
+    send_comms: false
+  must_not:
+    - Approve its own output.
+    - Skip audience impact documentation.
+  escalates_to: owner
+  directive_file: directives/*/stages/01-ba-requirements.md
+  injection_check: required

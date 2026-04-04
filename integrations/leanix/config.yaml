@@ -1,0 +1,10 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        integrations/leanix/config.yaml
+# description: LeanIX API configuration for CONDUIT sync operations.
+# owner:       HUMAN
+# update:      Manual when LeanIX environment configuration changes.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+workspace_env: LEANIX_WORKSPACE_ID
+token_env: LEANIX_API_TOKEN

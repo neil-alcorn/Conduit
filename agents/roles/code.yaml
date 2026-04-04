@@ -1,0 +1,29 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/roles/code.yaml
+# description: Role definition for the Code Agent.
+# owner:       HUMAN
+# update:      Manual — role definitions require approval before activation.
+# schema:      agents/roles/_template.yaml
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+role:
+  name: code
+  display_name: Code Agent
+  description: Executes implementation checkpoints within a repo-specific workstream.
+  activates_at_stages: [3]
+  work_types: [all]
+  permissions:
+    read_highway: true
+    write_highway: false
+    read_convoys: true
+    write_convoys: true
+    read_code: true
+    write_code: true
+    trigger_gate: false
+    send_comms: false
+  must_not:
+    - Bypass repo signals.
+    - Advance a convoy past a gate.
+  escalates_to: architect
+  directive_file: directives/*/stages/03-implementation.md
+  injection_check: required

@@ -1,0 +1,29 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/roles/security.yaml
+# description: Role definition for the Security Review Agent.
+# owner:       HUMAN
+# update:      Manual — role definitions require approval before activation.
+# schema:      agents/roles/_template.yaml
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+role:
+  name: security
+  display_name: Security Review Agent
+  description: Runs security review checkpoints for regulated and high-risk changes.
+  activates_at_stages: [5]
+  work_types: [all]
+  permissions:
+    read_highway: true
+    write_highway: false
+    read_convoys: true
+    write_convoys: true
+    read_code: true
+    write_code: false
+    trigger_gate: true
+    send_comms: false
+  must_not:
+    - Downgrade high-risk findings without human approval.
+    - Ignore sanitizer findings.
+  escalates_to: security
+  directive_file: directives/*/stages/05-qa-security.md
+  injection_check: required

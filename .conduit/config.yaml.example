@@ -1,0 +1,31 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        .conduit/config.yaml.example
+# description: Example local developer configuration copied into config.yaml during setup.
+# owner:       HUMAN
+# update:      Manual — update when local configuration fields change.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+conduit:
+  version: "0.1.0"
+developer:
+  name: "YOUR_NAME"
+  ado_alias: "YOUR_ADO_ALIAS"
+  email: "YOUR_EMAIL"
+organization:
+  name: "Horace Mann"
+  ado_org: "https://dev.azure.com/horacemann"
+  leanix_workspace: "YOUR_LEANIX_WORKSPACE_ID"
+sync:
+  mode: on_gate
+  remote: origin
+  branch: main
+agent:
+  runtime: codex
+  model: gpt-5.4
+  max_tokens: 8192
+  injection_check: true
+security:
+  sanitizer_strict: true
+  log_all_inputs: true
+  escalation_email: "security@example.com"

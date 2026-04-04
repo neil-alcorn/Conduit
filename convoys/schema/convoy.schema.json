@@ -1,0 +1,83 @@
+{
+  "$comment": "CONDUIT MANAGED FILE | file: convoys/schema/convoy.schema.json | description: JSON Schema for convoy state records. | owner: BOTH | update: Manual when convoy structure changes. | schema: self | last_update: 2026-04-04",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Convoy",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "work_type",
+    "stage",
+    "status",
+    "audience_scores",
+    "workstreams"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^CNV-[0-9]{4}$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "work_type": {
+      "enum": [
+        "net-new",
+        "enhancement",
+        "maintenance",
+        "bug-fix"
+      ]
+    },
+    "stage": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 8
+    },
+    "status": {
+      "enum": [
+        "active",
+        "blocked",
+        "gate-pending",
+        "complete"
+      ]
+    },
+    "ado_work_item": {
+      "type": "string"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "audience_scores": {
+      "type": "object",
+      "properties": {
+        "field_agent": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "customer": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "employee": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "vendor_partner": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        }
+      }
+    },
+    "workstreams": {
+      "type": "array",
+      "items": {
+        "$ref": "workstream.schema.json"
+      }
+    }
+  }
+}

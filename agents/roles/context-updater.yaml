@@ -1,0 +1,29 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/roles/context-updater.yaml
+# description: Role definition for the Context Updater Agent.
+# owner:       HUMAN
+# update:      Manual — role definitions require approval before activation.
+# schema:      agents/roles/_template.yaml
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+role:
+  name: context-updater
+  display_name: Context Updater Agent
+  description: Proposes post-merge CONTEXT.md updates and repo signal refreshes.
+  activates_at_stages: [8]
+  work_types: [all]
+  permissions:
+    read_highway: true
+    write_highway: true
+    read_convoys: true
+    write_convoys: false
+    read_code: true
+    write_code: false
+    trigger_gate: false
+    send_comms: false
+  must_not:
+    - Publish context changes without owner approval.
+    - Rewrite historical release records.
+  escalates_to: owner
+  directive_file: directives/shared/context-updater.md
+  injection_check: required

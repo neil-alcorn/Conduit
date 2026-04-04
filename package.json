@@ -1,0 +1,16 @@
+{
+  "$comment": "CONDUIT MANAGED FILE | file: package.json | description: Root package manifest for TypeScript-based support scripts. | owner: BOTH | update: Manual when Node-based tooling changes. | schema: none | last_update: 2026-04-04",
+  "name": "conduit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CONDUIT local orchestration repo support scripts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test dist/**/*.test.js",
+    "validate": "node dist/scripts/validate-highway.js"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.8.0"
+  }
+}

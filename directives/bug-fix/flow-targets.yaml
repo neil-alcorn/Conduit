@@ -1,0 +1,19 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        directives/bug-fix/flow-targets.yaml
+# description: Flow targets for bug-fix convoys by stage.
+# owner:       HUMAN
+# update:      Manual when flow targets are recalibrated.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+work_type: bug-fix
+targets_hours:
+  "00-intake": 2
+  "01-ba-requirements": 4
+  "02-solution-design": 4
+  "03-implementation": 16
+  "04-qa-unit": 8
+  "05-qa-security": 8
+  "06-qa-regression": 8
+  "07-bp-comms": 4
+  "08-release": 4

@@ -1,0 +1,19 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        directives/enhancement/flow-targets.yaml
+# description: Flow targets for enhancement convoys by stage.
+# owner:       HUMAN
+# update:      Manual when flow targets are recalibrated.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+work_type: enhancement
+targets_hours:
+  "00-intake": 8
+  "01-ba-requirements": 16
+  "02-solution-design": 16
+  "03-implementation": 48
+  "04-qa-unit": 16
+  "05-qa-security": 16
+  "06-qa-regression": 16
+  "07-bp-comms": 8
+  "08-release": 8

@@ -1,0 +1,35 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        highways/repo-signals.schema.yaml
+# description: Schema definition for the Repo Signals block carried in CONDUIT.md files.
+# owner:       BOTH
+# update:      Manual when Repo Signal semantics change.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+type: object
+required:
+  - operational_status
+  - system_class
+  - escalation_contacts
+  - audience_defaults
+  - leanix_id
+  - ado_project
+  - highway_init_date
+  - last_context_update
+properties:
+  operational_status:
+    enum: [ACTIVE, READ-ONLY, OBSERVE, QUARANTINE]
+  system_class:
+    enum: [MODERN, LEGACY, MAINFRAME, INTEGRATION, EXTERNAL]
+  escalation_contacts:
+    type: object
+  audience_defaults:
+    type: object
+  leanix_id:
+    type: string
+  ado_project:
+    type: string
+  highway_init_date:
+    type: string
+  last_context_update:
+    type: string

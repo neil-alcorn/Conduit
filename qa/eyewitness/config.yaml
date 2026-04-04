@@ -1,0 +1,20 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        qa/eyewitness/config.yaml
+# description: Configuration for the constrained EyeWitness-style screenshot workflow.
+# owner:       BOTH
+# update:      Manual when visual regression defaults change.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+browser:
+  engine: chromium
+  headless: true
+  width: 1920
+  height: 1080
+capture:
+  output_root: qa/output
+  save_source: true
+reports:
+  format:
+    - json
+    - html

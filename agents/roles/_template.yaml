@@ -1,0 +1,29 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/roles/{{ROLE_NAME}}.yaml
+# description: Template schema for CONDUIT agent role definitions.
+# owner:       HUMAN
+# update:      Manual — role definitions are reviewed at each phase boundary.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+role:
+  name: "{{ROLE_NAME}}"
+  display_name: "{{DISPLAY_NAME}}"
+  description: "{{WHAT_THIS_AGENT_DOES}}"
+  activates_at_stages: []
+  work_types: []
+  permissions:
+    read_highway: true
+    write_highway: false
+    read_convoys: true
+    write_convoys: false
+    read_code: false
+    write_code: false
+    trigger_gate: false
+    send_comms: false
+  must_not:
+    - "{{EXPLICIT_PROHIBITION_1}}"
+    - "{{EXPLICIT_PROHIBITION_2}}"
+  escalates_to: "{{CONTACT_ROLE}}"
+  directive_file: "directives/{{WORK_TYPE}}/stages/{{STAGE}}-{{ROLE}}.md"
+  injection_check: required

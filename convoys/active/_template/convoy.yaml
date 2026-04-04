@@ -1,0 +1,24 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        convoys/active/{{CONVOY_ID}}/convoy.yaml
+# description: Template for a convoy metadata and state record.
+# owner:       BOTH
+# update:      On stage transition, gate approval, and workstream status change.
+# schema:      convoys/schema/convoy.schema.json
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+id: "{{CONVOY_ID}}"
+title: "{{TITLE}}"
+work_type: "{{WORK_TYPE}}"
+stage: 0
+status: active
+ado_work_item: "{{ADO_ID}}"
+created_date: "{{DATE}}"
+created_by: "{{DEVELOPER}}"
+audience_scores:
+  field_agent: 1
+  customer: 1
+  employee: 1
+  vendor_partner: 1
+bp_gate_required: false
+workstreams: []
+gate_history: []

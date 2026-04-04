@@ -1,0 +1,77 @@
+{
+  "$comment": "CONDUIT MANAGED FILE | file: convoys/schema/checkpoint.schema.json | description: JSON Schema for checkpoint state records. | owner: BOTH | update: Manual when checkpoint structure changes. | schema: self | last_update: 2026-04-04",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Checkpoint",
+  "type": "object",
+  "required": [
+    "id",
+    "workstream_id",
+    "stage",
+    "title",
+    "status",
+    "acceptance_criteria"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^CP-[0-9]{6}$"
+    },
+    "workstream_id": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "integer"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "in-progress",
+        "passed",
+        "failed",
+        "skipped"
+      ]
+    },
+    "agent_role": {
+      "type": "string"
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "criterion": {
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "pending",
+              "pass",
+              "fail",
+              "skip"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "agent_session": {
+      "type": "string"
+    }
+  }
+}

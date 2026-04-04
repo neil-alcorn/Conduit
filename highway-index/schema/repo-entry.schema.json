@@ -1,0 +1,51 @@
+{
+  "$comment": "CONDUIT MANAGED FILE | file: highway-index/schema/repo-entry.schema.json | description: Schema for a repo entry in the Highway Index. | owner: BOTH | update: Manual when the Highway Index schema changes. | schema: self | last_update: 2026-04-04",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RepoEntry",
+  "type": "object",
+  "required": [
+    "repo"
+  ],
+  "properties": {
+    "repo": {
+      "type": "object",
+      "required": [
+        "slug",
+        "display_name",
+        "ado_project",
+        "remote_url",
+        "signals",
+        "highways"
+      ],
+      "properties": {
+        "slug": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "ado_project": {
+          "type": "string"
+        },
+        "ado_repo_id": {
+          "type": "string"
+        },
+        "remote_url": {
+          "type": "string"
+        },
+        "signals": {
+          "type": "object"
+        },
+        "highways": {
+          "type": "object"
+        },
+        "active_workstreams": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        integrations/ado/field-mappings.yaml
+# description: Local CONDUIT-to-ADO field mappings used during orchestration sync.
+# owner:       BOTH
+# update:      Manual until shared mappings move fully into conduit-core.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+convoy:
+  id: System.Id
+  title: System.Title
+  stage: Custom.ConduitStage
+  status: Custom.ConduitStatus
+workstream:
+  id: Custom.ConduitWorkstreamId
+  repo_slug: Custom.ConduitRepoSlug
+checkpoint:
+  id: Custom.ConduitCheckpointId
+  status: Custom.ConduitCheckpointStatus

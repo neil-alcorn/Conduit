@@ -1,0 +1,15 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        gates/protocols/security-gate.yaml
+# description: Protocol definition for the Security Gate.
+# owner:       HUMAN
+# update:      Manual when gate policy changes.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+gate: security
+stage: 5
+requires:
+  - sast_results
+  - dependency_scan
+approvers:
+  - security

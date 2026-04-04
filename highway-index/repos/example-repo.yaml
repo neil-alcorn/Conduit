@@ -1,0 +1,36 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        highway-index/repos/example-repo.yaml
+# description: Example Highway Index entry showing all supported repo registration fields.
+# owner:       BOTH
+# update:      Manual when the example entry needs to reflect schema changes.
+# schema:      highway-index/schema/repo-entry.schema.json
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+repo:
+  slug: "example-repo"
+  display_name: "Example Repo"
+  ado_project: "CONDUIT"
+  ado_repo_id: "example-repo-id"
+  remote_url: "https://dev.azure.com/horacemann/CONDUIT/_git/example-repo"
+  signals:
+    operational_status: ACTIVE
+    system_class: MODERN
+    escalation_contacts:
+      owner: "owner@example.com"
+      architect: "architect@example.com"
+      security: "security@example.com"
+      compliance: "compliance@example.com"
+      specialist: ""
+    audience_defaults:
+      field_agent: 1
+      customer: 1
+      employee: 3
+      vendor_partner: 1
+    leanix_id: "LX-EXAMPLE"
+    highway_init_date: "2026-04-04"
+    last_context_update: "2026-04-04"
+  highways:
+    conduit_md: "CONDUIT.md"
+    context_md: "CONTEXT.md"
+    acceptance_md: "QA/ACCEPTANCE.md"
+  active_workstreams: []

@@ -1,0 +1,31 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        .conduit/config.yaml
+# description: Local developer installation and runtime configuration for CONDUIT.
+# owner:       HUMAN
+# update:      Manual — set once during local setup.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+conduit:
+  version: "0.1.0"
+developer:
+  name: "TBD"
+  ado_alias: "TBD"
+  email: "TBD"
+organization:
+  name: "Horace Mann"
+  ado_org: "https://dev.azure.com/horacemann"
+  leanix_workspace: "TBD"
+sync:
+  mode: on_gate
+  remote: origin
+  branch: main
+agent:
+  runtime: codex
+  model: gpt-5.4
+  max_tokens: 8192
+  injection_check: true
+security:
+  sanitizer_strict: true
+  log_all_inputs: true
+  escalation_email: "TBD"

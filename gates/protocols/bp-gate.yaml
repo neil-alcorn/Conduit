@@ -1,0 +1,15 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        gates/protocols/bp-gate.yaml
+# description: Protocol definition for the BP Communication Gate.
+# owner:       HUMAN
+# update:      Manual when gate policy changes.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+gate: bp
+stage: 7
+requires:
+  - audience_comms_draft
+  - impact_summary
+approvers:
+  - owner

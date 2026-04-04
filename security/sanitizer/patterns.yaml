@@ -1,0 +1,41 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        security/sanitizer/patterns.yaml
+# description: Injection pattern library maintained by the security team.
+# owner:       HUMAN
+# update:      Manual review quarterly, or after any security incident.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+version: "0.1.0"
+patterns:
+  role_override:
+    description: "Attempts to redefine agent role or identity"
+    severity: HIGH
+    patterns:
+      - "ignore (previous|all) instructions"
+      - "you are now"
+      - "act as (a|an) (?!agent|assistant)"
+      - "disregard your (system prompt|guidelines|instructions)"
+      - "new persona"
+      - "jailbreak"
+  instruction_injection:
+    description: "Instructions embedded in content fields"
+    severity: HIGH
+    patterns:
+      - "\\[SYSTEM\\]"
+      - "<system>"
+      - "IMPORTANT:.*do not"
+      - "sudo mode"
+      - "developer mode"
+  context_flooding:
+    description: "Extremely long inputs designed to push instructions out of context"
+    severity: MEDIUM
+    max_input_chars: 50000
+  schema_violation:
+    description: "Input that does not match expected format for its type"
+    severity: MEDIUM
+    action: block_and_escalate
+actions:
+  HIGH: block_and_escalate
+  MEDIUM: sanitize_and_log
+  LOW: log_only

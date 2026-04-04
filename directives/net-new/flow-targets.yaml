@@ -1,0 +1,19 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        directives/net-new/flow-targets.yaml
+# description: Flow targets for net-new convoys by stage.
+# owner:       HUMAN
+# update:      Manual when flow targets are recalibrated.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+work_type: net-new
+targets_hours:
+  "00-intake": 8
+  "01-ba-requirements": 24
+  "02-solution-design": 24
+  "03-implementation": 80
+  "04-qa-unit": 24
+  "05-qa-security": 24
+  "06-qa-regression": 24
+  "07-bp-comms": 16
+  "08-release": 8

@@ -1,0 +1,55 @@
+{
+  "$comment": "CONDUIT MANAGED FILE | file: convoys/schema/workstream.schema.json | description: JSON Schema for repo-scoped workstream state records. | owner: BOTH | update: Manual when workstream structure changes. | schema: self | last_update: 2026-04-04",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkStream",
+  "type": "object",
+  "required": [
+    "id",
+    "convoy_id",
+    "repo_slug",
+    "stage",
+    "status",
+    "checkpoints"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^WS-[0-9]{4}-[A-Z]{3}$"
+    },
+    "convoy_id": {
+      "type": "string"
+    },
+    "repo_slug": {
+      "type": "string"
+    },
+    "stage": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 8
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "active",
+        "blocked",
+        "gate-pending",
+        "complete"
+      ]
+    },
+    "depends_on": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "branch": {
+      "type": "string"
+    },
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "$ref": "checkpoint.schema.json"
+      }
+    }
+  }
+}

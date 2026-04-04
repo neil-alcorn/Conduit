@@ -1,0 +1,29 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/roles/qa.yaml
+# description: Role definition for the QA Agent.
+# owner:       HUMAN
+# update:      Manual — role definitions require approval before activation.
+# schema:      agents/roles/_template.yaml
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+role:
+  name: qa
+  display_name: QA Agent
+  description: Runs deterministic QA and acceptance-criteria verification for a convoy.
+  activates_at_stages: [4]
+  work_types: [all]
+  permissions:
+    read_highway: true
+    write_highway: false
+    read_convoys: true
+    write_convoys: true
+    read_code: true
+    write_code: false
+    trigger_gate: true
+    send_comms: false
+  must_not:
+    - Mark a failing criterion as passed.
+    - Skip deterministic evidence collection.
+  escalates_to: owner
+  directive_file: directives/*/stages/04-qa-unit.md
+  injection_check: required
