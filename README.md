@@ -37,6 +37,7 @@ It does not contain the future dashboard or shared package internals. Those belo
 - [docs/security-model.md](/C:/Users/nalco/.codex/Conduit/docs/security-model.md): security-first design, sanitizer flow, and Repo Signal enforcement
 - [docs/current-state.md](/C:/Users/nalco/.codex/Conduit/docs/current-state.md): what is implemented now, what is scaffolded, and what is intentionally deferred
 - [docs/handoff.md](/C:/Users/nalco/.codex/Conduit/docs/handoff.md): concise handoff for the next engineer or agent
+- [docs/concept/README.md](/C:/Users/nalco/.codex/Conduit/docs/concept/README.md): source Word docs and repo-native concept/structure references
 - [docs/glossary.md](/C:/Users/nalco/.codex/Conduit/docs/glossary.md): canonical vocabulary
 - [docs/eisenhower-initiative.md](/C:/Users/nalco/.codex/Conduit/docs/eisenhower-initiative.md): repo on-ramp program
 - [docs/round-2-change-log.md](/C:/Users/nalco/.codex/Conduit/docs/round-2-change-log.md): most recent improvement round
