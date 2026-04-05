@@ -22,17 +22,23 @@ var commandTable = map[string]commandFunc{
 	"gate":       runGate,
 	"checkpoint": runCheckpoint,
 	"status":     runStatus,
+	"validate":   runValidate,
 }
 
 // Execute runs the conduit CLI.
 func Execute() int {
 	if len(os.Args) < 2 {
 		printUsage()
-		return 1
+		return 0
 	}
 
 	if os.Args[1] == "--version" || os.Args[1] == "version" {
 		fmt.Println("conduit 0.1.0")
+		return 0
+	}
+
+	if os.Args[1] == "--help" || os.Args[1] == "help" {
+		printUsage()
 		return 0
 	}
 
@@ -52,5 +58,17 @@ func Execute() int {
 }
 
 func printUsage() {
-	fmt.Println("conduit <sync|init|convoy|gate|checkpoint|status> [args]")
+	fmt.Println("CONDUIT - AI-native software delivery orchestration")
+	fmt.Println("")
+	fmt.Println("Usage:")
+	fmt.Println("  conduit <command> [args]")
+	fmt.Println("")
+	fmt.Println("Commands:")
+	fmt.Println("  sync        Refresh orchestration state before work or gates")
+	fmt.Println("  init        Run Highway Init tasks")
+	fmt.Println("  convoy      Manage convoys")
+	fmt.Println("  gate        Evaluate or approve gates")
+	fmt.Println("  checkpoint  Manage checkpoints")
+	fmt.Println("  status      Show current status")
+	fmt.Println("  validate    Validate CONDUIT-managed documents")
 }

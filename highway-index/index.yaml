@@ -9,5 +9,8 @@
 highway_index:
   version: "0.1.0"
   last_full_sync: "2026-04-04"
-  total_repos: 0
-  repos: []
+  total_repos: 1
+  repos:
+    - slug: conduit
+      entry: repos/conduit.yaml
+      status: ACTIVE

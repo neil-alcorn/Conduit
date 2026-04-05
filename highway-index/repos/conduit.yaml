@@ -1,0 +1,41 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        highway-index/repos/conduit.yaml
+# description: Highway Index entry for the CONDUIT orchestration repo itself.
+# owner:       BOTH
+# update:      On Repo Signal changes; last_context_update stamped by Context Updater Agent.
+# schema:      highway-index/schema/repo-entry.schema.json
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+repo:
+  slug: conduit
+  display_name: "CONDUIT Local Orchestration Repo"
+  ado_project: "CONDUIT"
+  ado_repo_id: ""
+  remote_url: "https://github.com/neil-alcorn/Conduit"
+  signals:
+    operational_status: ACTIVE
+    system_class: MODERN
+    escalation_contacts:
+      owner: ""
+      architect: ""
+      security: ""
+      compliance: ""
+      specialist: ""
+    audience_defaults:
+      field_agent: 1
+      customer: 1
+      employee: 5
+      vendor_partner: 1
+  leanix_id: ""
+  highway_init_date: "2026-04-04"
+  last_context_update: "2026-04-04"
+  highways:
+    conduit_md: "CONDUIT.md"
+    context_md: "CONTEXT.md"
+    acceptance_md: "qa/templates/ACCEPTANCE-md.template.md"
+  active_workstreams: []
+  notes: >
+    This is the CONDUIT orchestration repo registering itself. The Eisenhower
+    Initiative program is tracked as a Convoy in this repo. Self-registration
+    demonstrates Highway Init by example and establishes that CONDUIT manages
+    its own delivery through the same pipeline as downstream repos.

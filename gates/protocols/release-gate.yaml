@@ -1,0 +1,53 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        gates/protocols/release-gate.yaml
+# description: Release Gate protocol - final approval before merge and deployment.
+# owner:       HUMAN
+# update:      Manual when release process changes.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+gate:
+  type: release
+  stage: 8
+  display_name: "Release Gate"
+  description: >
+    The final gate before a Work Stream merges to main and triggers deployment.
+    By approving this gate, the approver confirms all prior gates were passed,
+    CONTEXT.md reflects what was actually built, required communications were
+    approved, and the release is safe for the target environment.
+  required_prior_gates:
+    - qa
+    - security
+  entry_conditions:
+    - "All Work Stream Checkpoints at Stage 8 are in passed status"
+    - "Release Agent has proposed CONTEXT.md update"
+    - "Context Updater Agent has stamped last_context_update in CONDUIT.md"
+    - "No open High or Critical security findings remain"
+    - "If bp_gate_required = true: BP Gate is approved"
+  agent_sequence:
+    - role: release
+      action: "Prepare release summary, diff CONTEXT.md, and confirm no open security findings."
+    - role: context-updater
+      action: "Propose final CONTEXT.md update and stamp last_context_update in CONDUIT.md."
+  human_decision:
+    approver_role: owner
+    fallback_approver: architect
+    decision_options:
+      approved: "Approve release - merge and deploy"
+      rework: "Return to implementation - issues noted in rationale"
+      blocked: "Block release - do not deploy until resolved"
+    rationale_required: true
+    audit_log: "convoys/active/{{CONVOY_ID}}/audit/gate-log.jsonl"
+  post_approval_actions:
+    - "Merge Work Stream branch to main"
+    - "Tag release in git with Convoy ID"
+    - "Move convoy folder to convoys/archive/"
+    - "Update highway-index entry with stamped last_context_update"
+    - "Notify ADO work item that the work item state is Done"
+  bp_gate_interaction: >
+    If bp_gate_required = true, the Release Gate approver confirms approved
+    BP communications were sent before post_approval_actions execute.
+  security_constraints:
+    - "No automated merges - release requires explicit human approval"
+    - "Gate approval is recorded to gate-log.jsonl before any merge action"
+    - "Rollback plan must be documented in Living Spec before gate presentation"

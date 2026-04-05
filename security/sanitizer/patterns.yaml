@@ -12,6 +12,7 @@ patterns:
     description: "Attempts to redefine agent role or identity"
     severity: HIGH
     patterns:
+      - "ignore all previous instructions"
       - "ignore (previous|all) instructions"
       - "you are now"
       - "act as (a|an) (?!agent|assistant)"
