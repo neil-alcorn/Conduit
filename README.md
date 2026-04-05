@@ -34,6 +34,7 @@ It does not contain the future dashboard or shared package internals. Those belo
 
 - [CONDUIT.md](/C:/Users/nalco/.codex/Conduit/CONDUIT.md): repo highway and Repo Signals for this repo
 - [docs/architecture.md](/C:/Users/nalco/.codex/Conduit/docs/architecture.md): how the system is structured and how the major folders work together
+- [docs/index.md](/C:/Users/nalco/.codex/Conduit/docs/index.md): audience-based documentation map
 - [docs/whitepaper.md](/C:/Users/nalco/.codex/Conduit/docs/whitepaper.md): polished vision, architecture, and operating-model whitepaper
 - [docs/security-model.md](/C:/Users/nalco/.codex/Conduit/docs/security-model.md): security-first design, sanitizer flow, and Repo Signal enforcement
 - [docs/current-state.md](/C:/Users/nalco/.codex/Conduit/docs/current-state.md): what is implemented now, what is scaffolded, and what is intentionally deferred
