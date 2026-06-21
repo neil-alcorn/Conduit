@@ -1,0 +1,15 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        highway-index/index.yaml
+# description: Master registry for all repos connected to the CONDUIT highway network.
+# owner:       BOTH
+# update:      On Highway Init completion and Repo Signal changes.
+# schema:      highway-index/schema/repo-entry.schema.json
+# last_update: 2026-06-20
+# ─────────────────────────────────────────────────────────────────────
+highway_index:
+  version: "0.1.0"
+  last_full_sync: ""
+  total_repos: 0
+  # Add your repos here as you run Highway Init. See repos/_template.yaml
+  # and repos/example-repo.yaml for the full entry shape.
+  repos: []

@@ -1,0 +1,19 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        qa/thresholds.yaml
+# description: Default QA pass thresholds by work type and system class.
+# owner:       HUMAN
+# update:      Manual when QA threshold policy changes.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+thresholds:
+  MODERN:
+    qa_gate_pass_rate: 0.95
+  LEGACY:
+    qa_gate_pass_rate: 0.98
+  MAINFRAME:
+    qa_gate_pass_rate: 1.0
+  INTEGRATION:
+    qa_gate_pass_rate: 0.98
+  EXTERNAL:
+    qa_gate_pass_rate: 1.0

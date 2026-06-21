@@ -1,0 +1,34 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        highway-index/repos/{{REPO_SLUG}}.yaml
+# description: Template for registering a repo in the Highway Index.
+# owner:       BOTH
+# update:      On Highway Init, Repo Signal changes, and CONTEXT.md updates.
+# schema:      highway-index/schema/repo-entry.schema.json
+# last_update: 2026-06-18
+# ─────────────────────────────────────────────────────────────────────
+repo:
+  slug: "{{REPO_SLUG}}"
+  display_name: "{{DISPLAY_NAME}}"
+  remote_url: "{{GIT_REMOTE_URL}}"
+  # Optional — identifier for this repo's project in your work tracker.
+  work_tracker_project: "{{WORK_TRACKER_PROJECT}}"
+  signals:
+    operational_status: QUARANTINE
+    system_class: MODERN
+    escalation_contacts:
+      owner: ""
+      architect: ""
+      security: ""
+      compliance: ""
+      specialist: ""
+    content_signals:
+      ai_input: yes
+      ai_modify: scoped
+      ai_train: no
+    highway_init_date: ""
+    last_context_update: ""
+  highways:
+    conduit_md: "{{PATH_TO_CONDUIT_MD}}"
+    context_md: "{{PATH_TO_CONTEXT_MD}}"
+    acceptance_md: "{{PATH_TO_ACCEPTANCE_MD}}"
+  active_workstreams: []

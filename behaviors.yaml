@@ -1,0 +1,45 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        behaviors.yaml
+# description: Configurable Conduit policies. CLI reads at runtime.
+# owner:       HUMAN
+# update:      When behavior policies change.
+# schema:      none
+# last_update: 2026-06-18
+# ─────────────────────────────────────────────────────────────────────
+
+# Conduit Behavior Engine — v1
+# Edit this file directly. Changes take effect on next CLI command.
+# All behaviors default to true unless explicitly set to false.
+
+version: 1
+convoy_create:
+  auto_create_features_from_workstreams: false
+gate_approve:
+  auto_commit: true
+  auto_push: true
+  auto_publish: false
+  advance_workstream_stages: true
+convoy_close:
+  auto_commit: true
+  auto_push: true
+  auto_publish: false
+  archive_convoy: true
+checkpoint:
+  auto_commit: true
+  auto_push: true
+usage:
+  auto_commit: false
+  auto_push: false
+context:
+  auto_pull: true
+  auto_build: true
+  auto_install_skills: true
+skills:
+  require_approval: false
+sync:
+  auto_pull_before_sync: true
+  sync_on_gate_approve: false
+governance:
+  require_work_item: false
+  require_gate_approval: false
+  require_peer_review: false

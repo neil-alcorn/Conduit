@@ -1,0 +1,42 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        highways/repo-signals.schema.yaml
+# description: Schema definition for the Repo Signals block carried in CONDUIT.md files.
+# owner:       BOTH
+# update:      Manual when Repo Signal semantics change.
+# schema:      none
+# last_update: 2026-04-18
+# ─────────────────────────────────────────────────────────────────────
+type: object
+required:
+  - operational_status
+  - system_class
+  - escalation_contacts
+  - highway_init_date
+  - last_context_update
+properties:
+  operational_status:
+    enum: [ACTIVE, READ-ONLY, OBSERVE, QUARANTINE]
+  system_class:
+    enum: [MODERN, LEGACY, MAINFRAME, INTEGRATION, EXTERNAL]
+  escalation_contacts:
+    type: object
+  content_signals:
+    type: object
+    description: Machine-readable permissions for AI agent interaction with repo content
+    properties:
+      ai_input:
+        enum: [yes, no, scoped]
+        description: Whether agents may use content for in-context work
+      ai_modify:
+        enum: [yes, no, scoped]
+        description: Whether agents may modify files (scoped = agent-managed only)
+      ai_train:
+        enum: [yes, no, scoped]
+        description: Whether content is available for external model training
+  work_tracker_project:
+    type: string
+    description: Optional identifier for the repo's project in your work tracker
+  highway_init_date:
+    type: string
+  last_context_update:
+    type: string

@@ -1,0 +1,77 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "axios": {
+      "name": "axios",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1098583,
+          "name": "axios",
+          "dependency": "axios",
+          "title": "Axios Cross-Site Request Forgery Vulnerability",
+          "url": "https://github.com/advisories/GHSA-wf5p-g6vw-rhxx",
+          "severity": "high",
+          "cwe": ["CWE-352"],
+          "cvss": { "score": 7.5, "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N" },
+          "range": ">=0.8.1 <0.28.0"
+        }
+      ],
+      "effects": [],
+      "range": ">=0.8.1 <0.28.0",
+      "nodes": ["node_modules/axios"],
+      "fixAvailable": true
+    },
+    "ws": {
+      "name": "ws",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1099071,
+          "name": "ws",
+          "dependency": "ws",
+          "title": "ws affected by a DoS when handling a request with many HTTP headers",
+          "url": "https://github.com/advisories/GHSA-3h5v-q93c-6h6q",
+          "severity": "moderate",
+          "cwe": ["CWE-476"],
+          "cvss": { "score": 5.3, "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L" },
+          "range": ">=8.0.0 <8.17.1"
+        }
+      ],
+      "effects": ["socket.io"],
+      "range": ">=8.0.0 <8.17.1",
+      "nodes": ["node_modules/ws"],
+      "fixAvailable": true
+    },
+    "socket.io": {
+      "name": "socket.io",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": ["ws"],
+      "effects": [],
+      "range": "*",
+      "nodes": ["node_modules/socket.io"],
+      "fixAvailable": true
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 1,
+      "high": 1,
+      "critical": 0,
+      "total": 2
+    },
+    "dependencies": {
+      "prod": 200,
+      "dev": 100,
+      "optional": 5,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 305
+    }
+  }
+}

@@ -1,0 +1,29 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/roles/release.yaml
+# description: Role definition for the Release Agent.
+# owner:       HUMAN
+# update:      Manual — role definitions require approval before activation.
+# schema:      agents/roles/_template.yaml
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+role:
+  name: release
+  display_name: Release Agent
+  description: Prepares release records, archive steps, and downstream context updates.
+  activates_at_stages: [8]
+  work_types: [all]
+  permissions:
+    read_highway: true
+    write_highway: true
+    read_convoys: true
+    write_convoys: true
+    read_code: true
+    write_code: false
+    trigger_gate: false
+    send_comms: false
+  must_not:
+    - Release without gate approval.
+    - Modify business logic during release staging.
+  escalates_to: owner
+  directive_file: directives/*/stages/08-release.md
+  injection_check: required

@@ -1,0 +1,93 @@
+{
+  "$comment": "CONDUIT MANAGED FILE | file: convoys/schema/convoy.schema.json | description: JSON Schema for convoy state records. | owner: BOTH | update: Manual when convoy structure changes. | schema: self | last_update: 2026-06-18 | deprecated_status_values: closed (use 'released' or 'withdrawn' — 3-release deprecation window)",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Convoy",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "work_type",
+    "stage",
+    "status",
+    "workstreams"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "work_type": {
+      "enum": [
+        "net-new",
+        "enhancement",
+        "maintenance",
+        "bug-fix"
+      ]
+    },
+    "stage": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "status": {
+      "$comment": "released, withdrawn, planned added 2026-04-30. closed retained for a 3-minor-release deprecation window: warn → warn → error. Use 'released' for shipped (Gate 8 approved) and 'withdrawn' for abandoned. 'planned' is a lane (stage=0 + no events) and is not typically written by the CLI.",
+      "enum": [
+        "active",
+        "blocked",
+        "gate-pending",
+        "complete",
+        "paused",
+        "released",
+        "withdrawn",
+        "planned",
+        "closed"
+      ]
+    },
+    "released_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "withdrawn_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "withdrawn_reason": {
+      "type": "string",
+      "minLength": 10
+    },
+    "work_item": {
+      "type": "string"
+    },
+    "initiative_id": {
+      "type": "string"
+    },
+    "created_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["target_repo"],
+      "properties": {
+        "target_repo": {
+          "type": "string",
+          "description": "Logical repo name (basename of git toplevel). Resolved via config.repos[] to a local absolute path."
+        },
+        "target_repo_path": {
+          "type": "string",
+          "description": "Deprecated — absolute path to the target repo. Use target_repo + config.repos[] resolution instead. Retained as fallback for pre-CLI-4 convoys."
+        }
+      },
+      "additionalProperties": true
+    },
+    "workstreams": {
+      "type": "array",
+      "items": {
+        "$ref": "workstream.schema.json"
+      }
+    }
+  }
+}

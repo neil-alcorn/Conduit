@@ -1,0 +1,60 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        security/sanitizer/patterns.yaml
+# description: Injection pattern library. Quarterly review required.
+# owner:       HUMAN
+# update:      Manual review quarterly, or after any security incident.
+#              Override process: conduit sanitizer override --convoy ID --reason "..."
+# schema:      none
+# last_update: 2026-06-04
+# ─────────────────────────────────────────────────────────────────────
+version: "0.1.0"
+patterns:
+  ansi_injection:
+    description: "ANSI/terminal escape sequences — can encode hidden instructions targeting AI agents (supply chain attack class; see jqwik 1.1.0)"
+    severity: HIGH
+    patterns:
+      - "\x1b\\["
+      - "\x1b\\]"
+      - "\\x1b"
+      - "\\u001b"
+      - "\\033"
+  role_override:
+    description: "Attempts to redefine agent role or identity"
+    severity: HIGH
+    patterns:
+      - "ignore all previous instructions"
+      - "ignore (previous|all) instructions"
+      - "you are now a"
+      - "act as (a|an) (?!agent|assistant|reviewer|approver|developer|analyst)"
+      - "disregard your (system prompt|guidelines|instructions)"
+      - "new persona"
+      - "jailbreak"
+      - "DAN mode"
+      - "developer mode enabled"
+  instruction_injection:
+    description: "Instructions embedded in content fields designed to redirect agent behavior"
+    severity: HIGH
+    patterns:
+      - "\\[SYSTEM\\]"
+      - "<system>"
+      - "sudo mode"
+      - "override (all |safety |previous )(instructions|constraints|guidelines)"
+      - "IMPORTANT:.*do not (follow|obey|apply|use) (your|the) (instructions|guidelines|system|constraints)"
+      # NOTE: "IMPORTANT: do not allow X" is a legitimate business requirement and NOT blocked.
+      # Only block attempts to redirect agent instructions, not business logic statements.
+  context_flooding:
+    description: "Extremely long inputs designed to push instructions out of context"
+    severity: MEDIUM
+    max_input_chars: 50000
+  schema_violation:
+    description: "Input that does not match expected format for its type"
+    severity: MEDIUM
+    action: block_and_escalate
+actions:
+  HIGH: block_and_escalate
+  MEDIUM: sanitize_and_log
+  LOW: log_only
+false_positive_review:
+  process: "Run: conduit sanitizer override --convoy ID --reason 'description'"
+  quarterly_review: true
+  reviewer: "security"

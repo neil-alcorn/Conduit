@@ -1,0 +1,110 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/context-injection.yaml
+# description: Stage-aware context injection map. Controls which documents are loaded
+#              at each stage to minimize token usage and maximize signal relevance.
+# owner:       HUMAN
+# update:      Manual when stage responsibilities change.
+# schema:      none
+# last_update: 2026-04-07
+# ─────────────────────────────────────────────────────────────────────
+
+# Context injection map — controls what gets loaded per stage
+# Sections: full | signals_only | summary_only | relevant_only | none
+# loading_cost is informational: low | medium | high
+
+stage_injection_map:
+  "0":  # Intake
+    recommended_model: "claude-haiku-4-5"
+    loading_cost: low
+    living_spec_sections: [intent, audience_impact]
+    conduit_md: signals_only
+    context_md: none
+    acceptance_md: none
+    rationale: "Stage 0 classifies work and scores audiences. Full CONTEXT.md is noise."
+
+  "1":  # BA Requirements
+    recommended_model: "claude-sonnet-4-6"
+    loading_cost: medium
+    living_spec_sections: [intent, audience_impact, acceptance_criteria]
+    conduit_md: signals_only
+    context_md: module_map_only
+    acceptance_md: none
+    rationale: "BA writes requirements against intent. Needs module map to avoid duplicating existing work."
+
+  "2":  # Solution Design
+    recommended_model: "claude-sonnet-4-6"
+    recommended_model_complex: "claude-opus-4-6"
+    loading_cost: high
+    living_spec_sections: [full]
+    conduit_md: full
+    context_md: full
+    acceptance_md: none
+    rationale: "Design requires full architecture picture. This is the highest-context stage."
+    upgrade_to_opus_when:
+      - "auth or session model change"
+      - "new external integration"
+      - "irreversible schema migration"
+      - "financial or PII data"
+
+  "3":  # Implementation
+    recommended_model: "claude-sonnet-4-6"
+    recommended_model_security_code: "claude-opus-4-6"
+    loading_cost: high
+    living_spec_sections: [full]
+    conduit_md: full
+    context_md: full
+    acceptance_md: relevant_only
+    rationale: "Implementation needs full context. Most expensive stage but most valuable."
+    upgrade_to_opus_when:
+      - "auth flows or permission checks"
+      - "database migration affecting production data"
+      - "cryptography or token handling"
+
+  "4":  # QA Unit
+    recommended_model: "claude-sonnet-4-6"
+    loading_cost: low
+    living_spec_sections: [acceptance_criteria]
+    conduit_md: signals_only
+    context_md: none
+    acceptance_md: full
+    rationale: "QA Unit verifies criteria. Does not need architecture context."
+
+  "5":  # QA Security — MANDATORY
+    recommended_model: "claude-opus-4-6"
+    loading_cost: medium
+    living_spec_sections: [full]
+    conduit_md: full
+    context_md: auth_and_data_flow_sections_only
+    acceptance_md: full
+    rationale: "Security requires Opus. Loads auth model and data flow to check boundaries."
+    model_override_policy: "DO NOT downgrade from Opus for Stage 5. Security analysis requires depth."
+
+  "6":  # QA Regression
+    recommended_model: "claude-sonnet-4-6"
+    loading_cost: low
+    living_spec_sections: [acceptance_criteria, work_streams]
+    conduit_md: signals_only
+    context_md: none
+    acceptance_md: full
+    rationale: "Regression scope comes from work streams. Full CONTEXT.md is not needed."
+
+  "7":  # Business Comms
+    recommended_model: "claude-haiku-4-5"
+    recommended_model_external: "claude-sonnet-4-6"
+    loading_cost: low
+    living_spec_sections: [intent, audience_impact, what_was_actually_built]
+    conduit_md: none
+    context_md: none
+    acceptance_md: none
+    rationale: "Comms is writing work. No architecture context needed. Upgrade to Sonnet for external audiences."
+    upgrade_to_sonnet_when:
+      - "the change has significant external-facing impact"
+
+  "8":  # Release
+    recommended_model: "claude-haiku-4-5"
+    loading_cost: low
+    living_spec_sections: [what_was_actually_built]
+    conduit_md: full
+    context_md: none
+    acceptance_md: none
+    rationale: "Release is checklist execution. Loads CONDUIT.md for escalation contacts only."

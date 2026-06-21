@@ -1,0 +1,22 @@
+{
+  "$comment": "CONDUIT MANAGED FILE | file: tsconfig.json | description: TypeScript compiler settings for conduit CLI and support scripts. | owner: BOTH | update: Manual when TypeScript tooling changes. | schema: none | last_update: 2026-04-07",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": ".",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "cli/src/**/*.ts",
+    "security/**/*.ts",
+    "scripts/**/*.ts"
+  ]
+}

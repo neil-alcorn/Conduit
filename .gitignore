@@ -1,0 +1,13 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        .gitignore
+# description: Git ignore rules for local build output, dependencies, and reference clones.
+# owner:       HUMAN
+# update:      Manual when local development artifacts change.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+node_modules/
+dist/
+.refs/
+bin/conduit
+*.log

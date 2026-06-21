@@ -1,0 +1,26 @@
+{
+  "$comment": "CONDUIT MANAGED FILE | file: package.json | description: Root package manifest for conduit CLI and support scripts. | owner: BOTH | update: Manual when Node-based tooling changes. | schema: none | last_update: 2026-06-19",
+  "name": "conduit",
+  "version": "0.4.0",
+  "private": true,
+  "description": "CONDUIT local orchestration repo — CLI and support scripts",
+  "bin": {
+    "conduit": "./dist/cli/src/index.js"
+  },
+  "scripts": {
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "cli": "node dist/cli/src/index.js",
+    "test": "node --import ./dist/cli/src/tests/setup-env.js --test dist/cli/src/tests/*.test.js",
+    "validate": "node dist/scripts/validate-highway.js"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.8.0"
+  }
+}

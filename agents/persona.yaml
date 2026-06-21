@@ -1,0 +1,21 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/persona.yaml
+# description: Conduit agent persona configuration. Controls whether agents
+#              express character (QW-12 pattern). Default: enabled.
+# owner:       HUMAN
+# update:      Manual — change enabled: false to suppress all personality.
+# schema:      none
+# last_update: 2026-04-09
+# ─────────────────────────────────────────────────────────────────────
+
+persona:
+  enabled: true              # set false to suppress all flavor text and quips
+
+  startup_quip: true         # random quote on CLI session start
+  gate_acknowledgment: true  # one-sentence closing when gate passes clean
+  quip_source: default       # path to custom quotes file, or "default"
+
+# Values (read-only — do not change, these are baked in):
+#   Fun | Relevant | Humble | Respectful | Inspiring | Sacrificial | Servant leadership
+#
+# See standards/agent-persona.md for full guidance on how these are expressed.

@@ -1,0 +1,15 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        gates/protocols/spec-gate.yaml
+# description: Protocol definition for the Spec Gate.
+# owner:       HUMAN
+# update:      Manual when gate policy changes.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+gate: spec
+stage: 1
+requires:
+  - living_spec_intent
+  - acceptance_criteria
+approvers:
+  - owner

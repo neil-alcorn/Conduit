@@ -1,0 +1,16 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/sessions/_template.yaml
+# description: Template for persisted agent session state records.
+# owner:       AGENT
+# update:      On session start, checkpoint completion, and session end.
+# schema:      none
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+session_id: "{{SESSION_ID}}"
+convoy_id: "{{CONVOY_ID}}"
+workstream_id: "{{WORKSTREAM_ID}}"
+agent_role: "{{AGENT_ROLE}}"
+tmux_session: "{{TMUX_SESSION}}"
+started_at: "{{STARTED_AT}}"
+last_checkpoint_completed: ""
+last_session_end: ""

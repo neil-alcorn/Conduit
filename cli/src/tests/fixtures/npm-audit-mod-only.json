@@ -1,0 +1,67 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "lodash": {
+      "name": "lodash",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1006,
+          "name": "lodash",
+          "dependency": "lodash",
+          "title": "Prototype Pollution in lodash",
+          "url": "https://github.com/advisories/GHSA-jf85-cpcp-j695",
+          "severity": "moderate",
+          "cwe": ["CWE-471"],
+          "cvss": { "score": 6.5, "vectorString": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N" },
+          "range": "<4.17.12"
+        }
+      ],
+      "effects": [],
+      "range": "<4.17.12",
+      "nodes": ["node_modules/lodash"],
+      "fixAvailable": true
+    },
+    "minimatch": {
+      "name": "minimatch",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1083,
+          "name": "minimatch",
+          "dependency": "minimatch",
+          "title": "Regular Expression Denial of Service in minimatch",
+          "url": "https://github.com/advisories/GHSA-f8q6-p94x-37v3",
+          "severity": "moderate",
+          "cwe": ["CWE-1333"],
+          "cvss": { "score": 5.6, "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H" },
+          "range": "<3.0.5"
+        }
+      ],
+      "effects": [],
+      "range": "<3.0.5",
+      "nodes": ["node_modules/minimatch"],
+      "fixAvailable": true
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 2,
+      "high": 0,
+      "critical": 0,
+      "total": 2
+    },
+    "dependencies": {
+      "prod": 100,
+      "dev": 50,
+      "optional": 0,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 150
+    }
+  }
+}

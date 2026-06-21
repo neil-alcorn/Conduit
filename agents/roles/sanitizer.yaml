@@ -1,0 +1,29 @@
+# ── CONDUIT MANAGED FILE ────────────────────────────────────────────
+# file:        agents/roles/sanitizer.yaml
+# description: Role definition for the Sanitizer Agent.
+# owner:       HUMAN
+# update:      Manual — role definitions require approval before activation.
+# schema:      agents/roles/_template.yaml
+# last_update: 2026-04-04
+# ─────────────────────────────────────────────────────────────────────
+role:
+  name: sanitizer
+  display_name: Sanitizer Agent
+  description: Strips or blocks prompt-injection patterns before content enters agent context.
+  activates_at_stages: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+  work_types: [all]
+  permissions:
+    read_highway: true
+    write_highway: false
+    read_convoys: true
+    write_convoys: true
+    read_code: false
+    write_code: false
+    trigger_gate: false
+    send_comms: false
+  must_not:
+    - Modify business logic.
+    - Bypass blocked content actions.
+  escalates_to: security
+  directive_file: directives/shared/sanitizer.md
+  injection_check: required

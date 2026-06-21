@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "events.schema.json",
+  "title": "Convoy Event",
+  "description": "A single line in a convoy's events.jsonl timeline file. Each record is a newline-delimited JSON object.",
+  "type": "object",
+  "required": ["ts", "type", "convoy"],
+  "properties": {
+    "ts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the event was recorded."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "convoy_started",
+        "gate_passed",
+        "gate_rejected",
+        "gate_skipped",
+        "gate_requested",
+        "stage_started",
+        "checkpoint_passed",
+        "checkpoint_failed",
+        "convoy_closed",
+        "convoy_paused",
+        "convoy_resumed",
+        "convoy_removed",
+        "model_usage"
+      ],
+      "description": "Event type discriminator."
+    },
+    "convoy": {
+      "type": "string",
+      "description": "The convoy ID (matches convoy.yaml id field)."
+    },
+    "gate": {
+      "type": "string",
+      "description": "Gate type (e.g. spec, design, qa). Present on gate_passed and gate_rejected events."
+    },
+    "stage": {
+      "type": "integer",
+      "description": "Convoy stage number at the time of the event."
+    },
+    "approver": {
+      "type": "string",
+      "description": "Actor who triggered the event. Present on gate and convoy events."
+    },
+    "reason": {
+      "type": "string",
+      "description": "Rejection reason. Present on gate_rejected events."
+    },
+    "checkpoint": {
+      "type": "string",
+      "description": "Checkpoint ID (e.g. CP-000001). Present on checkpoint_passed and checkpoint_failed events."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-form annotation. Optional on any event."
+    },
+    "duration_hours": {
+      "type": "number",
+      "description": "Hours elapsed for a stage. Optional on gate_passed events."
+    },
+    "usage": {
+      "type": "object",
+      "description": "Model usage payload. Present on model_usage events. Records which Claude model produced work at a given stage and (optionally) how many tokens it consumed. Used by `conduit usage report` to audit stage→model policy compliance and surface token totals per convoy.",
+      "required": ["model"],
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "Claude model id, e.g. claude-sonnet-4-6, claude-opus-4-6, claude-haiku-4-5."
+        },
+        "input_tokens": { "type": "integer", "minimum": 0 },
+        "output_tokens": { "type": "integer", "minimum": 0 },
+        "cache_read_tokens": { "type": "integer", "minimum": 0 },
+        "cache_creation_tokens": { "type": "integer", "minimum": 0 },
+        "files_read": {
+          "type": "array",
+          "description": "Files the agent reportedly read during this stage turn. Optional — populated by --read-file flags. Not authoritative (agent honor system).",
+          "items": {
+            "type": "object",
+            "required": ["path", "est_tokens"],
+            "properties": {
+              "path": { "type": "string", "description": "Repo-relative path." },
+              "est_tokens": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "gate_passed": {
+      "required": ["ts", "type", "convoy", "gate", "stage", "approver"],
+      "properties": { "type": { "const": "gate_passed" } }
+    },
+    "gate_rejected": {
+      "required": ["ts", "type", "convoy", "gate", "stage", "approver"],
+      "properties": { "type": { "const": "gate_rejected" } }
+    },
+    "stage_started": {
+      "required": ["ts", "type", "convoy", "stage"],
+      "properties": { "type": { "const": "stage_started" } }
+    },
+    "checkpoint_passed": {
+      "required": ["ts", "type", "convoy", "checkpoint", "stage"],
+      "properties": { "type": { "const": "checkpoint_passed" } }
+    },
+    "checkpoint_failed": {
+      "required": ["ts", "type", "convoy", "checkpoint", "stage"],
+      "properties": { "type": { "const": "checkpoint_failed" } }
+    },
+    "model_usage": {
+      "required": ["ts", "type", "convoy", "stage", "usage"],
+      "properties": { "type": { "const": "model_usage" } }
+    }
+  }
+}
