@@ -29,6 +29,12 @@ export interface BundledAgentInstallResult {
   errors: string[];
 }
 
+const BUNDLED_NON_PREFIXED_SKILLS = new Set(['session-wrap']);
+
+function isBundledConduitSkillName(name: string): boolean {
+  return name.startsWith('conduit-') || BUNDLED_NON_PREFIXED_SKILLS.has(name);
+}
+
 export function listBundledConduitSkills(repoPath: string): string[] {
   const bundledSkillsDir = path.join(repoPath, '.claude', 'skills');
   if (!fs.existsSync(bundledSkillsDir)) return [];
@@ -36,7 +42,7 @@ export function listBundledConduitSkills(repoPath: string): string[] {
   return fs.readdirSync(bundledSkillsDir, { withFileTypes: true })
     .filter(entry => entry.isDirectory())
     .map(entry => entry.name)
-    .filter(name => name.startsWith('conduit-'))
+    .filter(isBundledConduitSkillName)
     .filter(name => fs.existsSync(path.join(bundledSkillsDir, name, 'SKILL.md')))
     .sort();
 }

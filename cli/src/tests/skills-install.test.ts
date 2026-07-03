@@ -11,7 +11,7 @@ import { describe, it } from 'node:test';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { syncBundledSkillsToTargets, syncBundledAgentsToTargets } from '../internal/skills-install.js';
+import { listBundledConduitSkills, syncBundledSkillsToTargets, syncBundledAgentsToTargets } from '../internal/skills-install.js';
 import { detectAgentHost } from '../internal/agent-host.js';
 
 interface SavedEnv {
@@ -59,10 +59,26 @@ function makeRepo(): string {
   fs.mkdirSync(path.join(skillDir, 'assets'), { recursive: true });
   fs.writeFileSync(path.join(skillDir, 'SKILL.md'), '---\nname: conduit-context\nallowed-tools: Bash, Agent\n---\n\nRun: ~/.claude/bin/conduit context\nFollow the conduit repo\'s CLAUDE.md\n', 'utf-8');
   fs.writeFileSync(path.join(skillDir, 'assets', 'prompt.md'), 'Use conduit context.\n', 'utf-8');
+  const wrapDir = path.join(repo, '.claude', 'skills', 'session-wrap');
+  fs.mkdirSync(wrapDir, { recursive: true });
+  fs.writeFileSync(path.join(wrapDir, 'SKILL.md'), '---\nname: session-wrap\ndescription: Wrap up a session.\nallowed-tools: Bash\n---\n\nRun wrap-up.\n', 'utf-8');
+  const ignoredDir = path.join(repo, '.claude', 'skills', 'personal-local');
+  fs.mkdirSync(ignoredDir, { recursive: true });
+  fs.writeFileSync(path.join(ignoredDir, 'SKILL.md'), '---\nname: personal-local\n---\n\nDo not bundle.\n', 'utf-8');
   return repo;
 }
 
 describe('syncBundledSkillsToTargets', () => {
+  it('lists conduit-prefixed skills plus the session-wrap slash command', () => {
+    const repo = makeRepo();
+
+    try {
+      assert.deepEqual(listBundledConduitSkills(repo), ['conduit-context', 'session-wrap']);
+    } finally {
+      fs.rmSync(repo, { recursive: true, force: true });
+    }
+  });
+
   it('syncs bundled conduit skills to existing Claude and Codex homes without deleting extras', () => {
     const repo = makeRepo();
     const home = fs.mkdtempSync(path.join(os.tmpdir(), 'conduit-skills-home-'));
@@ -77,7 +93,10 @@ describe('syncBundledSkillsToTargets', () => {
         const results = syncBundledSkillsToTargets(repo);
         assert.equal(results.length, 2);
         assert.ok(fs.existsSync(path.join(claudeHome, 'skills', 'conduit-context', 'SKILL.md')));
+        assert.ok(fs.existsSync(path.join(claudeHome, 'skills', 'session-wrap', 'SKILL.md')));
         assert.ok(fs.existsSync(path.join(codexHome, 'skills', 'conduit-context', 'SKILL.md')));
+        assert.ok(fs.existsSync(path.join(codexHome, 'skills', 'session-wrap', 'SKILL.md')));
+        assert.ok(!fs.existsSync(path.join(codexHome, 'skills', 'personal-local', 'SKILL.md')));
         assert.ok(fs.existsSync(path.join(codexHome, 'skills', 'conduit-context', 'assets', 'prompt.md')));
         assert.ok(fs.existsSync(path.join(codexHome, 'skills', 'conduit-context', 'LOCAL.md')));
         const codexSkill = fs.readFileSync(path.join(codexHome, 'skills', 'conduit-context', 'SKILL.md'), 'utf-8');
@@ -102,8 +121,9 @@ describe('syncBundledSkillsToTargets', () => {
         const results = syncBundledSkillsToTargets(repo);
         assert.equal(results.length, 1);
         assert.equal(results[0].target.host, 'codex');
-        assert.equal(results[0].installed, 1);
+        assert.equal(results[0].installed, 2);
         assert.ok(fs.existsSync(path.join(home, '.codex', 'skills', 'conduit-context', 'SKILL.md')));
+        assert.ok(fs.existsSync(path.join(home, '.codex', 'skills', 'session-wrap', 'SKILL.md')));
       });
     } finally {
       fs.rmSync(repo, { recursive: true, force: true });

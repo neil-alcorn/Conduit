@@ -74,6 +74,7 @@ synced to detected Claude/Codex skill homes by `conduit context`.
 | `conduit-session` | Save, resume, and list session handoffs for context continuity. |
 | `conduit-skill` | Create, list, validate, and sync skills. Request reviewer approval via the optional registry. |
 | `conduit-status` | Check current status — active convoys, stage, gates, and checkpoints. |
+| `session-wrap` | Wrap up the current session: save handoff, verify, commit intended changes, and emit a carry-over prompt. |
 
 Each skill has a `SKILL.md` file with YAML frontmatter (`name`, `description`, `allowed-tools`) and
 prompt content that tells the active agent host how to execute the operation.
