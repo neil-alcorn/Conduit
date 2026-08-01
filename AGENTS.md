@@ -39,7 +39,7 @@ These mirror the 21 named workflows that Claude Code exposes via `.claude/skills
 | `conduit-plan` | `conduit plan <init\|show\|approve> [convoy-id]` | Before implementation — requirements → impact map → task graph | Read `directives/shared/spec-driven-planning.md` first |
 | `conduit-execute` | `conduit execute <start\|status\|pause\|resume> [convoy-id]` | Wave-based autonomous execution after plan approval | Read `directives/shared/autonomous-execution.md` for wave/checkpoint rules; use `directives/shared/parallel-dispatch.md` for parallel-agent invocation |
 | `conduit-review` | `conduit review <init\|show\|findings> [convoy-id] [--depth quick\|standard\|deep]` | Outbound code review (after impl) **OR** inbound review-feedback processing | Outbound: `directives/shared/code-review-protocol.md`. Inbound: `directives/shared/receiving-review.md` (findings arrive as `FND-NNNN` with severity blocking/major/minor/suggestion) |
-| `conduit-gate` | `conduit gate <eval\|request\|approve\|reject\|skip> [convoy-id] [gate-type]` | Stage complete; needs gate review | **MANDATORY:** after `gate approve`, apply work-tracker state transitions (see below) |
+| `conduit-gate` | `conduit gate <eval\|request\|approve\|reject\|skip\|council> [convoy-id] [gate-type]` | Stage complete; needs gate review | **MANDATORY:** after `gate approve`, apply work-tracker state transitions (see below) |
 | `conduit-pre-gate` | `conduit pre-gate [convoy-id]` | Verification checklist before requesting a gate (build, test, living-spec, AC, token budget) | None |
 | `conduit-peer-approve` | (no direct CLI — agent generates a prompt) | Requester just hit a four-eyes block at Gate 3 or Gate 5 and needs a copy-pasteable peer prompt | See "Peer-approve prompt generation" below |
 | `conduit-debug` | `conduit debug <start\|hypothesize\|evidence\|resolve\|list> [--session DBG-N]` | Investigating bugs / unexpected behavior with scientific method | Read `directives/shared/debug-protocol.md` |
@@ -63,6 +63,15 @@ The CLI does **not** auto-apply work-tracker state changes after `gate approve`.
 Use when the user is the **requester** on a Conduit convoy and just hit a four-eyes block at Gate 3 or Gate 5. Produces a self-contained prompt the requester sends to a peer.
 
 **When NOT to trigger:** the gate is self-approvable (0, 1, 2, 4, 6, 7, 8); use standard `conduit gate` instead. Also skip if the user IS the peer (the receiver follows the prompt; this workflow generates it).
+
+**If no second human exists** (solo maintainer), four-eyes has a second recognized method: register an independent council review, then approve.
+
+```
+conduit gate council <convoy-id> <gate-N> --manifest <file>
+conduit gate approve <convoy-id> <gate-N> --reason "..."
+```
+
+The manifest lists reviewers (`name`, `model`, `verdict`, `artifact`). The CLI validates independence — at least 2 reviewers, at least 2 **distinct models**, and every cited artifact must exist on disk. A council review is a REVIEW, not an approval, and does not lower the evidence bar; see `directives/shared/gate-evaluator.md` for how to judge one.
 
 **Steps:**
 1. Detect convoy and gate by running `conduit context [convoy-id]`. Parse active convoy ID and pending gate number. Abort if gate is not 3 or 5.
