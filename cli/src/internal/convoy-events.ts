@@ -60,7 +60,10 @@ export interface ConvoyEvent {
 const VALID_TRANSITIONS: Record<string, Set<string>> = {
   'convoy_created': new Set(['gate_requested', 'gate_passed', 'stage_started', 'convoy_paused', 'convoy_removed', 'model_usage']),
   'stage_started': new Set(['gate_requested', 'gate_passed', 'gate_rejected', 'gate_skipped', 'checkpoint_passed', 'checkpoint_failed', 'convoy_paused', 'convoy_removed', 'executor_started', 'executor_wave_complete', 'executor_complete', 'agent_dispatched', 'agent_complete', 'plan_created', 'review_complete', 'debug_session_started', 'self_correction', 'model_usage']),
-  'gate_requested': new Set(['gate_passed', 'gate_rejected', 'gate_skipped', 'model_usage']),
+  'gate_requested': new Set(['gate_passed', 'gate_rejected', 'gate_skipped', 'gate_council_review', 'model_usage']),
+  // A council review sits between request and decision: it records the independent findings
+  // the approver then acts on, so a gate can still be passed, rejected, or skipped after it.
+  'gate_council_review': new Set(['gate_passed', 'gate_rejected', 'gate_skipped', 'model_usage']),
   'gate_passed': new Set(['stage_started', 'convoy_closed', 'convoy_promoted', 'model_usage']),
   'convoy_promoted': new Set(['convoy_closed', 'model_usage']),
   'gate_rejected': new Set(['gate_requested', 'stage_started', 'convoy_paused', 'model_usage']),
