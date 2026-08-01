@@ -72,7 +72,7 @@ const COMMAND_HELP: Record<string, string> = {
   'sync':        'conduit sync [convoy-id]',
   'init':        'conduit init [--target <path>] [--global <central-path>] [--user]',
   'convoy':      'conduit convoy <new|close|pause|resume|remove|list> [convoy-id] [--force] [--confirm]',
-  'gate':        'conduit gate <request|eval|approve|reject|skip> <convoy-id> <gate-N> [--reason "..."] [--request <file>]',
+  'gate':        'conduit gate <request|eval|approve|reject|skip|council> <convoy-id> <gate-N> [--reason "..."] [--request <file>] [--manifest <file>]',
   'checkpoint':  'conduit checkpoint <create|pass|fail|list> [convoy-id] [args]',
   'status':      'conduit status [convoy-id]',
   'validate':    'conduit validate <highway|convoy|registry|all>',

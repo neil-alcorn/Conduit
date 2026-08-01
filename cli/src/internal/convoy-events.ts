@@ -37,12 +37,14 @@ export interface ConvoyEvent {
         'executor_started' | 'executor_wave_complete' | 'executor_complete' |
         'agent_dispatched' | 'agent_complete' | 'plan_created' | 'review_complete' |
         'debug_session_started' | 'debug_session_resolved' | 'self_correction' |
-        'pr_created' | 'model_usage' | 'convoy_promoted';
+        'pr_created' | 'model_usage' | 'convoy_promoted' | 'gate_council_review';
   convoy: string;
   gate?: string;
   stage?: number;
   approver?: string;
   reason?: string;
+  /** gate_council_review only: the independent reviewers whose findings satisfied four-eyes. */
+  reviewers?: Array<{ name: string; model: string; verdict: string; artifact: string }>;
   checkpoint?: string;
   notes?: string;
   workstream?: string;

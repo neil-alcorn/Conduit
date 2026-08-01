@@ -29,6 +29,82 @@ import { updateConvoyYaml } from '../internal/convoy-yaml.js';
 import { isHeadless, MissingContextFieldError } from '../internal/headless-io.js';
 import { headlessOutput, headlessError, headlessEvent } from '../internal/headless-output.js';
 
+/**
+ * A council review: N independent reviews of the same artifact by DISTINCT models, each
+ * recorded as a file in the convoy's audit trail.
+ *
+ * This is the second recognized way to satisfy four-eyes at Gates 3 and 5. The first — a
+ * second human — remains preferred and is still the default. A council is for the case the
+ * original rule did not anticipate: a solo maintainer, where "find another person" means the
+ * gate never closes and the pressure is to bypass it entirely.
+ *
+ * What makes it a real check rather than a rubber stamp is independence, so that is what is
+ * enforced here: at least two reviewers, no two on the same model, each with an artifact that
+ * actually exists on disk. A council cannot be declared retroactively from nothing.
+ */
+export interface CouncilReviewer {
+  name: string;
+  model: string;
+  verdict: string;
+  artifact: string;
+}
+
+export function parseCouncilManifest(manifestPath: string, convoyRoot: string): CouncilReviewer[] {
+  if (!fs.existsSync(manifestPath)) {
+    throw new Error(`council manifest not found: ${manifestPath}`);
+  }
+  const raw = fs.readFileSync(manifestPath, 'utf8');
+  const reviewers: CouncilReviewer[] = [];
+  let current: Partial<CouncilReviewer> | null = null;
+
+  for (const line of raw.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const itemMatch = trimmed.match(/^-\s*name:\s*(.+)$/);
+    if (itemMatch) {
+      if (current) reviewers.push(current as CouncilReviewer);
+      current = { name: stripQuotes(itemMatch[1]) };
+      continue;
+    }
+    const fieldMatch = trimmed.match(/^(model|verdict|artifact):\s*(.+)$/);
+    if (fieldMatch && current) {
+      (current as Record<string, string>)[fieldMatch[1]] = stripQuotes(fieldMatch[2]);
+    }
+  }
+  if (current) reviewers.push(current as CouncilReviewer);
+
+  if (reviewers.length < 2) {
+    throw new Error(
+      `council review requires at least 2 reviewers; manifest lists ${reviewers.length}. ` +
+      `One reviewer is not a review board.`
+    );
+  }
+  for (const r of reviewers) {
+    if (!r.name || !r.model || !r.verdict || !r.artifact) {
+      throw new Error(`council manifest entry incomplete (needs name, model, verdict, artifact): ${JSON.stringify(r)}`);
+    }
+    const artifactPath = path.isAbsolute(r.artifact) ? r.artifact : path.join(convoyRoot, r.artifact);
+    if (!fs.existsSync(artifactPath)) {
+      throw new Error(
+        `council reviewer '${r.name}' cites artifact '${r.artifact}', which does not exist. ` +
+        `Every reviewer's findings must be on disk in the audit trail.`
+      );
+    }
+  }
+  const models = reviewers.map((r) => r.model.toLowerCase());
+  if (new Set(models).size < 2) {
+    throw new Error(
+      `council review requires reviewers on at least 2 DISTINCT models; all ${reviewers.length} ran on '${models[0]}'. ` +
+      `Same model twice correlates its blind spots and is not independent review.`
+    );
+  }
+  return reviewers;
+}
+
+function stripQuotes(v: string): string {
+  return v.trim().replace(/^["'](.*)["']$/, '$1');
+}
+
 function emitLearningCheck(trigger: 'gate_request', convoyId: string, stage: number): void {
   const data = {
     trigger,
@@ -287,15 +363,28 @@ export async function runGate(args: string[]): Promise<void> {
         }
       }
 
-      // Four-eyes principle: requester and approver must differ at gates 3 and 5 (AC-5, AC-6)
+      // Four-eyes principle: requester and approver must differ at gates 3 and 5 (AC-5, AC-6).
+      // Satisfied EITHER by a distinct human approver, OR by a registered council review
+      // (see `conduit gate council`) — multiple independent reviewers on distinct models,
+      // each with findings recorded in the audit trail.
       if (prevStage === 3 || prevStage === 5) {
         const requestEvent = [...convoyEvents].reverse().find(e => e.type === 'gate_requested' && e.stage === prevStage);
-        if (requestEvent && requestEvent.approver === actor) {
+        const councilEvent = [...convoyEvents].reverse().find(
+          (e) => (e as { type?: string; stage?: number }).type === 'gate_council_review' && (e as { stage?: number }).stage === prevStage
+        ) as { reviewers?: CouncilReviewer[]; ts?: string } | undefined;
+
+        if (requestEvent && requestEvent.approver === actor && !councilEvent) {
           throw new Error(
             `CONDUIT: four-eyes required — gate requester and approver must be different at Gate ${prevStage}. ` +
             `Requester: ${requestEvent.approver}, Current actor: ${actor}. ` +
-            `A different team member must run 'conduit gate approve'.`
+            `Either a different team member runs 'conduit gate approve', or register an ` +
+            `independent council review first: conduit gate council ${convoyId} ${gateType} --manifest <file>.`
           );
+        }
+        if (requestEvent && requestEvent.approver === actor && councilEvent) {
+          const names = (councilEvent.reviewers ?? []).map((r) => `${r.name} (${r.model}): ${r.verdict}`);
+          console.log(`  four-eyes satisfied by council review — requester self-approving on the council's findings:`);
+          for (const n of names) console.log(`    - ${n}`);
         }
       }
 
@@ -451,6 +540,65 @@ export async function runGate(args: string[]): Promise<void> {
 
       console.log(`CONDUIT: gate ${gateType} skipped for ${convoyId} at stage ${stage} — reason: ${flagReason}`);
       console.log(`  warn: Gate skip logged to audit trail. Human review recommended.`);
+      return;
+    }
+
+    case 'council': {
+      checkPermission(repoPath, 'write');
+      if (remaining.length < 2) {
+        throw new Error('usage: conduit gate council [convoy-id] [gate-type] --manifest <file>');
+      }
+      const [convoyId, gateType, ...councilRest] = remaining;
+      validateConvoyId(convoyId);
+      const yamlPath = convoyYamlPath(convoyRepoPath, convoyId);
+      if (!fs.existsSync(yamlPath)) throw new Error(`convoy ${convoyId} not found in convoys/active/`);
+      const stage = readStage(yamlPath);
+      if (stage !== 3 && stage !== 5) {
+        throw new Error(
+          `council review only applies at Gates 3 and 5 (the four-eyes gates); this convoy is at stage ${stage}. ` +
+          `Other gates are self-approvable — use 'conduit gate approve'.`
+        );
+      }
+      const { value: manifestFlag } = parseFlagValue(councilRest, '--manifest');
+      if (!manifestFlag) {
+        throw new Error(
+          'gate council requires --manifest <file> listing the reviewers. ' +
+          'Each needs name, model, verdict, and an artifact path in the audit trail.'
+        );
+      }
+      const convoyRoot = convoyRootPath(convoyRepoPath, convoyId);
+      const manifestPath = path.isAbsolute(manifestFlag) ? manifestFlag : path.join(convoyRepoPath, manifestFlag);
+      const reviewers = parseCouncilManifest(manifestPath, convoyRoot);
+
+      const actor = currentActor();
+      const ts = new Date().toISOString();
+      appendConvoyEvent(
+        {
+          ts,
+          type: 'gate_council_review',
+          convoy: convoyId,
+          gate: gateType,
+          stage,
+          approver: actor,
+          reason: `council review: ${reviewers.length} independent reviewers on ${new Set(reviewers.map((r) => r.model.toLowerCase())).size} distinct models`,
+          reviewers,
+        },
+        convoyRoot
+      );
+
+      const councilBehaviors = loadBehaviors(convoyRepoPath);
+      if (councilBehaviors.gate_approve.auto_commit) {
+        gitSync(convoyRepoPath, [
+          path.join('convoys', 'active', convoyId, 'events.jsonl'),
+        ], `conduit: gate-${stage} council review registered for ${convoyId}`, { push: councilBehaviors.gate_approve.auto_push });
+      }
+
+      console.log(`CONDUIT: council review registered for ${convoyId} gate-${stage}`);
+      for (const r of reviewers) {
+        console.log(`  - ${r.name} (${r.model}): ${r.verdict}  [${r.artifact}]`);
+      }
+      console.log(`  This satisfies four-eyes at gate-${stage}. The requester may now run 'conduit gate approve'.`);
+      console.log(`  note: council review is a REVIEW, not an approval. The human decision is still yours to record.`);
       return;
     }
 

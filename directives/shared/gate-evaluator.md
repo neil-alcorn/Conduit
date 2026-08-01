@@ -205,3 +205,68 @@ When applying a Minor Fix: commit the change under your own git identity with a 
 - **Assuming completion**: Treating "implementation is complete" as evidence that tests were written
 - **Overlooking the criterion matrix**: Forgetting to check Stage 4 criterion coverage in favor of test counts alone
 - **Treating CANNOT VERIFY as PASS**: When information is missing, the gate request is incomplete — SEND_BACK
+
+---
+
+## Four-Eyes at Gates 3 and 5: Two Recognized Methods
+
+Gates 3 and 5 are the segregation-of-duties boundary — the requester cannot be the approver.
+There are exactly **two** ways to satisfy that, and the CLI enforces both.
+
+### Method 1 — a second human (preferred, and still the default)
+
+A different person runs `conduit gate approve`. Nothing has changed here. If a second reviewer
+is available, use them: `conduit-peer-approve` generates the prompt to hand over.
+
+### Method 2 — a registered council review
+
+Multiple **independent** reviewers examine the same artifact and record their findings, then
+the requester approves on the strength of those findings:
+
+```
+conduit gate council <convoy-id> <gate-N> --manifest <file>
+conduit gate approve <convoy-id> <gate-N> --note "..."
+```
+
+This exists for the case the original rule did not anticipate: a **solo maintainer**, where
+"find another person" means the gate never closes and the practical pressure becomes to bypass
+the gate entirely. A recorded council is strictly better than a skipped gate.
+
+**What the CLI enforces, and why.** A council is only a real check if the reviews are genuinely
+independent, so independence is what is validated — not the reviewers' seniority or their
+verdicts:
+
+| Rule | Reason |
+|---|---|
+| At least **2** reviewers | One reviewer is not a review board. |
+| At least **2 distinct models** | Two runs of the same model correlate their blind spots. Agreement between them is not corroboration. |
+| Every reviewer cites an **artifact that exists on disk** | A council cannot be declared retroactively from nothing. The findings must be in the audit trail, readable later by someone who was not there. |
+
+A `gate_council_review` event is written to `events.jsonl` naming every reviewer, their model,
+their verdict, and their artifact. The subsequent approval prints the council roster, so the
+audit trail shows *what* the approver relied on, not merely that they approved.
+
+### What a council review does NOT do
+
+- **It is not an approval.** It is a review. The human decision is still recorded separately and
+  is still the human's to make and own.
+- **It does not lower the evidence bar.** Everything above in this document applies unchanged.
+  A council that rubber-stamps is worth less than no council, because it launders a rubber stamp
+  through a process that looks rigorous.
+- **It does not survive a disagreement.** If reviewers split, that is a signal to resolve the
+  disagreement — not to count verdicts and take the majority.
+
+### Judging a council review as an evaluator
+
+When a gate request cites a council review, check:
+
+1. **Were the reviewers pointed at different questions, or the same one?** Independent reviews of
+   the same narrow question are weaker than reviews with distinct mandates (e.g. correctness vs.
+   scalability vs. adversarial).
+2. **Did any reviewer actually run the verification** (build, tests, migrations) rather than
+   reading the diff? Prefer at least one that did, and expect its real output to be quoted.
+3. **Did the council find anything?** A council that returns clean on a large change, first time,
+   is itself a finding — either the review was shallow or the mandate was too narrow.
+4. **Were the findings fixed, deferred with a reason, or silently dropped?** Deferred findings
+   must land somewhere durable (a known-issues doc, the next gate's conditions), not only in a
+   review transcript.
